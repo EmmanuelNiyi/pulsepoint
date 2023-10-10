@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+    django:
+        build: .
+        container_name: django
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/pulsepoint
+        ports:
+            - "8000:8000"
+        depends_on:
+            - pgdb
+    pgdb:
+        image: postgres
+        environment:
+            - POSTGRES_DB=pulsepoint_db
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=nietzsche1
+        container_name: pgdb
+        restart: always
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5543:5432"
+
+        networks:
+            app_net:
+                ipv4_address: 192.168.0.2
+
+    pgadmin:
+        container_name: pgadmin4
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: emmanuelniyi03@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: 1234567890
+        ports:
+            - "5050:80"
+        networks:
+            app_net:
+                ipv4_address: 192.168.0.3
+        volumes:
+            - pgadmin_data:/var/lib/pgadmin
+            - pgadmin_config:/var/lib/pgadmin/config_local
+
+
+
+
+volumes:
+    pgdata:
+    pgadmin_data:
+    pgadmin_config:
+
+
+networks:
+    app_net:
+        ipam:
+            driver: default
+            config:
+                - subnet: "192.168.0.0/24"
+                  gateway: "192.168.0.1"
