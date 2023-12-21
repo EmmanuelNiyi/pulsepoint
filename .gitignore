@@ -161,4 +161,5 @@ cython_debug/
 
 
 # Me
-commands.txt
+Extras/commands.txt
+/Extras/
