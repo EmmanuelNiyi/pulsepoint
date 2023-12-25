@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from accounts.models import Role, UserActivation, User
+from accounts.models import Role, UserActivation, User, UserProfile, DonorProfile
 
 
 # User = settings.AUTH_USER_MODEL
@@ -39,10 +39,18 @@ class UserReadSerializer(ModelSerializer):
 class UserActivationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserActivation
-        extra_kwargs = {'activation_key': {'write_only': True}}
+        extra_kwargs = {'activation_key': {'write_only': True, 'required': False}}
         fields = '__all__'
 
-# class ProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Profile
-#         fields = '__all__'
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
+
+
+class DonorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonorProfile
+        fields = '__all__'

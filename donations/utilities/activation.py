@@ -1,5 +1,3 @@
-import random
-
 from django.core.mail import send_mail, EmailMessage
 
 
@@ -27,11 +25,3 @@ def send_email(email, activation_key):
 #     )
 #
 #     print(message.sid)
-
-
-def generate_activation():
-    res = ""
-    for _ in range(1, 6):
-        x = random.randint(1, 10)
-        res = res + str(x)
-    return res

@@ -9,9 +9,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from accounts.models import Role, User, UserActivation
-from accounts.serializers import RoleSerializer, UserSerializer, UserActivationSerializer, LoginSerializer
-from accounts.utilities.activation import send_email
+from accounts.models import Role, User, UserActivation, UserProfile, DonorProfile
+from accounts.serializers import RoleSerializer, UserSerializer, UserActivationSerializer, LoginSerializer, \
+    UserProfileSerializer, DonorProfileSerializer
+from accounts.utilities.activation import send_email, generate_activation
 
 
 # Create your views here.
@@ -132,20 +133,27 @@ class UserLoginView(generics.CreateAPIView):
         return Response('wrong username or password', status=status.HTTP_400_BAD_REQUEST)
 
 
-# class UserProfileView(generics.CreateAPIView):
-#     serializer_class = ProfileSerializer
-#     queryset = Profile.objects.all()
-#
-#
-# class UserProfileDetailView(generics.RetrieveUpdateAPIView):
-#     serializer_class = ProfileSerializer
-#     queryset = Profile.objects.all()
-#     lookup_field = 'user'
+class UserProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
+    lookup_field = 'user'
 
 
-def generate_activation():
-    res = ""
-    for _ in range(1, 6):
-        x = random.randint(1, 10)
-        res = res + str(x)
-    return res
+class GetAllUserProfilesView(ListAPIView):
+    """Get all User Profiles view"""
+
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
+
+
+class DonorProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DonorProfileSerializer
+    queryset = DonorProfile.objects.all()
+    lookup_field = 'user'
+
+
+class GetAllDonorProfilesView(ListAPIView):
+    """Get all Donor Profiles view"""
+
+    serializer_class = DonorProfileSerializer
+    queryset = DonorProfile.objects.all()
