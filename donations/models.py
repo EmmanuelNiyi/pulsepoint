@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User, TimeStampedModel
+from accounts.models import User, TimeStampedModel, UserProfile, DonorProfile
 
 
 class DonationCenter(TimeStampedModel):
@@ -18,14 +18,15 @@ class DonationCenter(TimeStampedModel):
         ('Pending', 'Pending Accreditation'),
         ('Not Accredited', 'Not Accredited')
     ]
-    accreditation_status = models.CharField(max_length=50, choices=ACCREDITATION_STATUS_CHOICES, default='Not Accredited')
+    accreditation_status = models.CharField(max_length=50, choices=ACCREDITATION_STATUS_CHOICES,
+                                            default='Not Accredited')
     accreditation_date = models.DateField(null=True, blank=True)
 
     opening_time = models.TimeField()
     closing_time = models.TimeField()
 
     appointment_availability = models.BooleanField(default=False)
-    appointment_scheduling_system = models.CharField(max_length=100, null=True, blank=True) #If Available
+    appointment_scheduling_system = models.CharField(max_length=100, null=True, blank=True)  # If Available
 
     notification_preferences = models.CharField(max_length=100, blank=True)
     additional_notes = models.TextField(blank=True)
@@ -35,7 +36,7 @@ class DonationCenter(TimeStampedModel):
 
 
 class Volunteer(TimeStampedModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
 
     availability_days_times = models.TextField()
     preferred_roles = models.CharField(max_length=100, blank=True)
@@ -48,7 +49,8 @@ class Volunteer(TimeStampedModel):
         ('Certified', 'Certified'),
         ('Not Certified', 'Not Certified')
     ]
-    certification_status = models.CharField(max_length=50, choices=CERTIFICATION_STATUS_CHOICES, default='Not Certified')
+    certification_status = models.CharField(max_length=50, choices=CERTIFICATION_STATUS_CHOICES,
+                                            default='Not Certified')
     training_completion_dates = models.DateField(null=True, blank=True)
 
     communication_preferences = models.CharField(max_length=100, blank=True)
@@ -67,3 +69,63 @@ class Volunteer(TimeStampedModel):
 
     def __str__(self):
         return f"Volunteer - {self.user.username}"
+
+
+class InvestigationType(TimeStampedModel):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
+class LaboratoryInvestigation(TimeStampedModel):
+    user = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING)
+    investigation = models.ForeignKey(InvestigationType, on_delete=models.DO_NOTHING)
+    result = models.TextField(null=True, blank=True)
+    date = models.DateField()
+    additional_notes = models.TextField(null=True, blank=True)
+
+
+# Model to handle Blood Donations
+class BloodDonation(TimeStampedModel):
+    donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE)
+    donation_date_time = models.DateTimeField()
+    donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
+    blood_type = models.CharField(
+        max_length=5)  # Assuming blood type can be represented as a string (e.g., 'A+', 'B-', etc.)
+    donation_quantity = models.PositiveIntegerField()
+    health_assessment = models.TextField(null=True, blank=True)
+    processing_status = models.CharField(max_length=255, null=True, blank=True)
+    storage_information = models.TextField(null=True, blank=True)
+    additional_notes = models.TextField(null=True, blank=True)
+    is_scheduled_donation = models.BooleanField(default=False)  # to know if it was scheduled on this platform
+
+    assigned_volunteer = models.ForeignKey(Volunteer, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    # Information about peripheral investigations
+    laboratory_investigations = models.ForeignKey(LaboratoryInvestigation, on_delete=models.DO_NOTHING,
+                                                  null=True, blank=True) # NOT IN USE FOR NOW
+
+    def __str__(self):
+        return f"BloodDonation - {self.donor.user.username} - {self.donation_date_time}"
+
+
+class DonationSchedule(TimeStampedModel):
+    donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE)
+    volunteer_assignment_status = models.BooleanField(default=False)
+    assigned_volunteer = models.ForeignKey(Volunteer, on_delete=models.DO_NOTHING, null=True, blank=True)
+
+    # use a pre_save signal to create this
+    blood_donation = models.OneToOneField(BloodDonation, on_delete=models.DO_NOTHING)
+    scheduled_date_time = models.DateTimeField()
+    donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
+
+    appointment_status = models.CharField(max_length=50)
+    reminder_settings = models.CharField(max_length=50, null=True, blank=True)
+    health_assessment = models.TextField(null=True, blank=True)
+    notification_preferences = models.CharField(max_length=50, null=True, blank=True)
+    additional_notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"DonationSchedule - {self.donor.user.username} - {self.scheduled_date_time}"
+
+# TODO Notification or reminders table
+# TODO Add next donation next eligible date to blood donor profile table

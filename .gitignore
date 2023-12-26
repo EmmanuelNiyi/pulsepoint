@@ -161,8 +161,8 @@ cython_debug/
 
 
 # Me
-Extras/commands.txt
-/Extras/
+
 
 # docker stuff
 .dockerignore
+
