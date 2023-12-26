@@ -1,0 +1,15 @@
+# ACCOUNTS
+# ------------------------------------------------------------------------------
+The format i am going with this the accounts and roles is a sort of incremental model
+with donor as the lowest level and admin as the highest level.
+so we have the following roles:
+1. Donor
+2. Volunteer
+3. Volunteer Coordinator
+3. Staff
+4. Admin
+
+
+# RELATIONSHIPS
+All relationships that refer to the user are made to the userprofile table. This is because there is a 1-1 relationship
+with the user table and this frees up load on the user table, thus the user table is solely for authentication

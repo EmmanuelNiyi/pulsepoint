@@ -1,0 +1,62 @@
+docker-compose run django django-admin startproject pulsepoint .
+docker exec -it postgres psql -U postgres
+
+docker-compose up / down
+
+# Check container IDs
+docker ps
+# Access docker container
+docker exec -it django bash
+
+Postgres
+==========
+docker exec -it postgres psql -U postgres
+\c <database_name>
+\c pulsepoint_db
+\d
+# press "e" to exit
+
+SELECT * FROM user_auth_user;
+\d+ <table_name>
+\q
+
+
+==========
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'pulsepoint_db',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'pgdb',
+        'PORT': 5432,
+    }
+}
+
+
+pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+# Token
+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
+
+# Docker
+docker-compose up -d --build
+docker-compose down
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+docker-compose exec web python manage.py collectstatic
+docker-compose exec web python manage.py shell
+docker-compose exec web python manage.py test
+docker-compose exec web python manage.py runserver
+# Access the Django container's shell
+docker-compose exec your_django_service_name bash
+'your_django_service_name refers to the name of the service that runs your Django application. This service name is specified within the docker-compose.yml file
+
+# Making migrations
+docker-compose exec web python manage.py makemigrations
+docker-compose exec web python manage.py migrate
+
+# Windows command to show folder structure
+tree C: /f
