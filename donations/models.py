@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import User, TimeStampedModel, UserProfile, DonorProfile
+from accounts.models import User, TimeStampedModel, UserProfile
 
 
 class DonationCenter(TimeStampedModel):
@@ -86,7 +86,7 @@ class LaboratoryInvestigation(TimeStampedModel):
 
 # Model to handle Blood Donations
 class BloodDonation(TimeStampedModel):
-    donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE)
+    donor = models.ForeignKey("DonorProfile", on_delete=models.CASCADE)
     donation_date_time = models.DateTimeField()
     donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
     blood_type = models.CharField(
@@ -102,14 +102,14 @@ class BloodDonation(TimeStampedModel):
 
     # Information about peripheral investigations
     laboratory_investigations = models.ForeignKey(LaboratoryInvestigation, on_delete=models.DO_NOTHING,
-                                                  null=True, blank=True) # NOT IN USE FOR NOW
+                                                  null=True, blank=True)  # NOT IN USE FOR NOW
 
     def __str__(self):
         return f"BloodDonation - {self.donor.user.username} - {self.donation_date_time}"
 
 
 class DonationSchedule(TimeStampedModel):
-    donor = models.ForeignKey(DonorProfile, on_delete=models.CASCADE)
+    donor = models.ForeignKey("DonorProfile", on_delete=models.CASCADE)
     volunteer_assignment_status = models.BooleanField(default=False)
     assigned_volunteer = models.ForeignKey(Volunteer, on_delete=models.DO_NOTHING, null=True, blank=True)
 
@@ -127,5 +127,43 @@ class DonationSchedule(TimeStampedModel):
     def __str__(self):
         return f"DonationSchedule - {self.donor.user.username} - {self.scheduled_date_time}"
 
+
 # TODO Notification or reminders table
 # TODO Add next donation next eligible date to blood donor profile table
+
+
+class DonorProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+    blood_type = models.CharField(max_length=5, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
+                                                         ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')],
+                                  blank=True)
+    medical_conditions = models.TextField(blank=True)
+
+    # Donation History
+    total_donations = models.PositiveIntegerField(default=0)
+    last_donation_date = models.DateField(null=True, blank=True)
+    quantity_donated = models.FloatField(default=0)
+
+    # Donor Eligibility
+    eligibility_status = models.CharField(max_length=20, choices=[('Eligible', 'Eligible'), ('Deferred', 'Deferred'),
+                                                                  ('Restricted', 'Restricted')],
+                                          default='Eligible')
+    eligibility_reason = models.TextField(blank=True)
+
+    preferred_center = models.ForeignKey(DonationCenter, on_delete=models.DO_NOTHING, null=True, blank=True)
+    preferred_times = models.TextField(blank=True)
+
+    # Notifications
+    receive_notifications = models.BooleanField(default=True)
+    opt_in_communication = models.BooleanField(default=True)
+
+    # Consent and Agreements
+    consent_share_information = models.BooleanField(default=False)
+    terms_and_conditions_acknowledged = models.BooleanField(default=False)
+
+    # Additional Notes
+    additional_notes = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"DonorProfile - {self.user_profile.user.username}"

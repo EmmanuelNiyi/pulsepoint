@@ -4,7 +4,7 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from accounts.models import Role, UserActivation, User, UserProfile, DonorProfile
+from accounts.models import Role, UserActivation, User, UserProfile
 
 
 # User = settings.AUTH_USER_MODEL
@@ -43,14 +43,10 @@ class UserActivationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = '__all__'
 
 
-class DonorProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DonorProfile
-        fields = '__all__'
+

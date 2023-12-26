@@ -9,9 +9,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from accounts.models import Role, User, UserActivation, UserProfile, DonorProfile
+from accounts.models import Role, User, UserActivation, UserProfile
 from accounts.serializers import RoleSerializer, UserSerializer, UserActivationSerializer, LoginSerializer, \
-    UserProfileSerializer, DonorProfileSerializer
+    UserProfileSerializer
 from accounts.utilities.activation import send_email, generate_activation
 
 
@@ -146,14 +146,3 @@ class GetAllUserProfilesView(ListAPIView):
     queryset = UserProfile.objects.all()
 
 
-class DonorProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = DonorProfileSerializer
-    queryset = DonorProfile.objects.all()
-    lookup_field = 'user'
-
-
-class GetAllDonorProfilesView(ListAPIView):
-    """Get all Donor Profiles view"""
-
-    serializer_class = DonorProfileSerializer
-    queryset = DonorProfile.objects.all()
