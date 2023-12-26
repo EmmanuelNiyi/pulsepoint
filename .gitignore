@@ -162,3 +162,7 @@ cython_debug/
 
 # Me
 
+
+# docker stuff
+.dockerignore
+

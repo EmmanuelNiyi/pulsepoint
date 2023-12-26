@@ -36,7 +36,7 @@ class UserReadSerializer(ModelSerializer):
         fields = ['last_name']
 
 
-class UserActivationSerializer(serializers.ModelSerializer):
+class UserActivationSerializer(ModelSerializer):
     class Meta:
         model = UserActivation
         extra_kwargs = {'activation_key': {'write_only': True, 'required': False}}
