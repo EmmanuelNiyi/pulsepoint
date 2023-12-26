@@ -68,7 +68,7 @@ class UserProfile(TimeStampedModel):
 
 
 class DonorProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    user = models.OneToOneField(UserProfile, on_delete=models.DO_NOTHING)
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     blood_type = models.CharField(max_length=5, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
                                                          ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')],
