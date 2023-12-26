@@ -66,4 +66,5 @@ class UserProfile(TimeStampedModel):
     emergency_contact_relationship = models.CharField(max_length=50, blank=True)
     emergency_contact_phone = models.CharField(max_length=15, blank=True)
 
-
+    def __str__(self):
+        return f"{self.user}'s user profile"

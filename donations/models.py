@@ -72,11 +72,13 @@ class Volunteer(TimeStampedModel):
 
 
 class InvestigationType(TimeStampedModel):
+    """Not in use"""
     name = models.CharField(max_length=255)
     description = models.TextField()
 
 
 class LaboratoryInvestigation(TimeStampedModel):
+    """Not in use"""
     user = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING)
     investigation = models.ForeignKey(InvestigationType, on_delete=models.DO_NOTHING)
     result = models.TextField(null=True, blank=True)
@@ -86,7 +88,7 @@ class LaboratoryInvestigation(TimeStampedModel):
 
 # Model to handle Blood Donations
 class BloodDonation(TimeStampedModel):
-    donor = models.ForeignKey("DonorProfile", on_delete=models.CASCADE)
+    donor = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     donation_date_time = models.DateTimeField()
     donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
     blood_type = models.CharField(
@@ -109,7 +111,7 @@ class BloodDonation(TimeStampedModel):
 
 
 class DonationSchedule(TimeStampedModel):
-    donor = models.ForeignKey("DonorProfile", on_delete=models.CASCADE)
+    donor = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     volunteer_assignment_status = models.BooleanField(default=False)
     assigned_volunteer = models.ForeignKey(Volunteer, on_delete=models.DO_NOTHING, null=True, blank=True)
 

@@ -49,10 +49,12 @@ docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic
 docker-compose exec web python manage.py shell
 docker-compose exec web python manage.py test
-docker-compose exec web python manage.py runserver
+docker-compose exec web python manage.py runserver'
+
 # Access the Django container's shell
 docker-compose exec your_django_service_name bash
 'your_django_service_name refers to the name of the service that runs your Django application. This service name is specified within the docker-compose.yml file
+docker-compose exec web bash
 
 # Making migrations
 docker-compose exec web python manage.py makemigrations
@@ -60,3 +62,17 @@ docker-compose exec web python manage.py migrate
 
 # Windows command to show folder structure
 tree C: /f
+
+
+
+#
+Accessing django in docker environment
+import django
+django.setup()
+
+from django.utils import timezone
+from donations.models import DonationCenter
+
+
+# Date time format
+2023-12-26T14:30
