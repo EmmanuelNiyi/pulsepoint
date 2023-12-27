@@ -68,3 +68,5 @@ class UserProfile(TimeStampedModel):
 
     def __str__(self):
         return f"{self.user}'s user profile"
+
+# Is the AUTH_USER model different from the User model subclassing the AbstractUser 

@@ -1,14 +1,25 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
 
 from accounts.models import UserProfile
-from donations.models import DonorProfile, BloodDonation
-from donations.serializers import DonorProfileSerializer, BloodDonationSerializer
+from donations.models import DonorProfile, BloodDonationLog, DonationCenter
+from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer
 
 
 # Create your views here.
+# class views for the DonationCenter Model, handles get and post requests
+class DonationCenterView(ListCreateAPIView):
+    serializer_class = DonationCenterSerializer
+    queryset = DonationCenter.objects.all()
+
+
+# class view for getting, updating and deleting a single donationcenter instance
+class DonationCenterDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DonationCenterSerializer
+    queryset = DonationCenter.objects.all()
+    lookup_field = 'name'
 
 
 class DonorProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -32,8 +43,8 @@ class CreateBloodDonationView(CreateAPIView):
     Try it out
     """
 
-    serializer_class = BloodDonationSerializer
-    queryset = BloodDonation.objects.all()
+    serializer_class = BloodDonationLogSerializer
+    queryset = BloodDonationLog.objects.all()
 
     def perform_create(self, serializer):
         try:
@@ -52,8 +63,8 @@ class CreateBloodDonationView(CreateAPIView):
 
 
 class BloodDonationDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = BloodDonationSerializer
-    queryset = BloodDonation.objects.all()
+    serializer_class = BloodDonationLogSerializer
+    queryset = BloodDonationLog.objects.all()
     lookup_field = 'id'
 
     # LookUp field does the job of the code below
@@ -66,10 +77,10 @@ class BloodDonationDetailView(generics.RetrieveUpdateDestroyAPIView):
 class GetAllUserBloodDonationView(generics.ListAPIView):
     """Get all of a businesses expenses"""
 
-    serializer_class = BloodDonationSerializer
-    queryset = BloodDonation.objects.all()
+    serializer_class = BloodDonationLogSerializer
+    queryset = BloodDonationLog.objects.all()
 
     def get_queryset(self):
         user = self.request.user
         user_profile = UserProfile.objects.filter(user_id=user.id)[0]
-        return BloodDonation.objects.filter(donor=user_profile)
+        return BloodDonationLog.objects.filter(donor=user_profile)

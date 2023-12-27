@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User, TimeStampedModel, UserProfile
+from datetime import timedelta, timezone
 
 
 class DonationCenter(TimeStampedModel):
@@ -87,7 +88,7 @@ class LaboratoryInvestigation(TimeStampedModel):
 
 
 # Model to handle Blood Donations
-class BloodDonation(TimeStampedModel):
+class BloodDonationLog(TimeStampedModel):
     donor = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     donation_date_time = models.DateTimeField()
     donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
@@ -116,7 +117,7 @@ class DonationSchedule(TimeStampedModel):
     assigned_volunteer = models.ForeignKey(Volunteer, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     # use a pre_save signal to create this
-    blood_donation = models.OneToOneField(BloodDonation, on_delete=models.DO_NOTHING)
+    blood_donation = models.OneToOneField(BloodDonationLog, on_delete=models.DO_NOTHING)
     scheduled_date_time = models.DateTimeField()
     donation_center = models.ForeignKey(DonationCenter, on_delete=models.CASCADE)
 
@@ -130,28 +131,32 @@ class DonationSchedule(TimeStampedModel):
         return f"DonationSchedule - {self.donor.user.username} - {self.scheduled_date_time}"
 
 
-# TODO Notification or reminders table
-# TODO Add next donation next eligible date to blood donor profile table
+
 
 
 class DonorProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+    # blood type choices
+    BLOOD_TYPE_CHOICES = [('A+', 'A+'), ('A-', 'A-'), 
+                            ('B+', 'B+'), ('B-', 'B-'),
+                            ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')]
+
+    user = models.OneToOneField(User, on_delete=models.DO_NOTHING)  # a user cannot have more than donor profile at a time 
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
-    blood_type = models.CharField(max_length=5, choices=[('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'),
-                                                         ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')],
-                                  blank=True)
+    blood_type = models.CharField(max_length=5, choices= BLOOD_TYPE_CHOICES, blank=True)   # should this be allowed to be blank
     medical_conditions = models.TextField(blank=True)
 
     # Donation History
     total_donations = models.PositiveIntegerField(default=0)
     last_donation_date = models.DateField(null=True, blank=True)
-    quantity_donated = models.FloatField(default=0)
+    quantity_donated = models.FloatField(default=0) 
 
     # Donor Eligibility
     eligibility_status = models.CharField(max_length=20, choices=[('Eligible', 'Eligible'), ('Deferred', 'Deferred'),
                                                                   ('Restricted', 'Restricted')],
                                           default='Eligible')
     eligibility_reason = models.TextField(blank=True)
+
+   
 
     preferred_center = models.ForeignKey(DonationCenter, on_delete=models.DO_NOTHING, null=True, blank=True)
     preferred_times = models.TextField(blank=True)
@@ -168,4 +173,15 @@ class DonorProfile(models.Model):
     additional_notes = models.TextField(blank=True)
 
     def __str__(self):
-        return f"DonorProfile - {self.user_profile.user.username}"
+        return f"DonorProfile - {self.user_profile.user.username}" 
+    
+
+ # next Donation eligibility date
+    def eligibilityDate(self):
+        last_donation_date = self.last_donation_date
+        next_eligibility_date = last_donation_date + timedelta(weeks=8)
+        return next_eligibility_date
+
+# TODO Notification or reminders table
+# TODO Add next donation next eligible date to blood donor profile table ✅
+# TODO Donation history table with one-to-many relationship with Donor profile table ✅
