@@ -44,12 +44,16 @@ class BloodDonationLogSerializer(ModelSerializer):
 
 
 class DonationScheduleSerializer(ModelSerializer):
+    blood_donation_log = BloodDonationLogSerializer()
+
     class Meta:
         model = DonationSchedule
         fields = '__all__'
+        extra_kwargs = {'blood_donation_log': {'required': False}}
 
 
 class DonorProfileSerializer(ModelSerializer):
     class Meta:
         model = DonorProfile
         fields = '__all__'
+

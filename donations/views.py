@@ -4,8 +4,9 @@ from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIVie
 from rest_framework.response import Response
 
 from accounts.models import UserProfile
-from donations.models import DonorProfile, BloodDonationLog, DonationCenter
-from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer
+from donations.models import DonorProfile, BloodDonationLog, DonationCenter, DonationSchedule
+from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer, \
+    DonationScheduleSerializer
 
 
 # Create your views here.
@@ -84,3 +85,50 @@ class GetAllUserBloodDonationView(generics.ListAPIView):
         user = self.request.user
         user_profile = UserProfile.objects.filter(user_id=user.id)[0]
         return BloodDonationLog.objects.filter(donor=user_profile)
+
+
+class DonationScheduleCreationView(CreateAPIView):
+    """
+    Create a new blood donation schedule for a donor
+    """
+
+    serializer_class = DonationScheduleSerializer
+    queryset = DonationSchedule.objects.all()
+
+    def perform_create(self, serializer):
+        try:
+            if serializer.is_valid():
+                # create blood donation schedule
+
+                # create blood donation log
+                donor_profile = DonorProfile.objects.filter(user_profile=serializer.validated_data['donor'])[0]
+                blood_type = donor_profile.blood_type
+                blood_donation_log = BloodDonationLog.objects.create(
+                    donor=serializer.validated_data['donor'],
+                    donation_center=serializer.validated_data['donation_center'],
+                    is_scheduled_donation=True,
+                    blood_type=blood_type,
+                    additional_notes=serializer.validated_data['additional_notes'],
+
+                    # TODO: create a signal to assign a volunteer if not created and assigned
+                    # assigned_volunteer=serializer.validated_data['assigned_volunteer'],
+
+                )
+
+                instance = serializer.save(blood_donation_log=blood_donation_log)
+
+                return Response(
+                    {
+                        "message": "Blood donation schedule created successfully",
+                        "instance": instance,
+                    },
+                    status=status.HTTP_201_CREATED,
+                )
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DonationScheduleDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = DonationScheduleSerializer
+    queryset = DonationSchedule.objects.all()
+    lookup_field = 'id'

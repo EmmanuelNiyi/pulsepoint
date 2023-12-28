@@ -2,6 +2,7 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from accounts.models import UserProfile, User
+from donations.models import DonorProfile
 
 
 @receiver(post_save, sender=User)
@@ -25,8 +26,6 @@ def create_user_profile(instance, created, **kwargs):
 @receiver(post_save, sender=UserProfile)
 def create_donor_profile(instance, created, **kwargs):
     print(f"Creating or updating donor profile for {instance}")
-
-    from accounts.models import DonorProfile
 
     # Check if a donor profile already exists for the user profile
     existing_donor_profile = DonorProfile.objects.filter(user_profile=instance).first()
