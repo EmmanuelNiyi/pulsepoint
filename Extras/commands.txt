@@ -76,3 +76,7 @@ from donations.models import DonationCenter
 
 # Date time format
 2023-12-26T14:30
+
+# docker logs
+docker logs -f <container_id>
+docker logs -f django
