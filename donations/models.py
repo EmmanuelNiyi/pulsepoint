@@ -179,7 +179,13 @@ class DonorProfile(models.Model):
         next_eligibility_date = last_donation_date + timedelta(weeks=8)
         return next_eligibility_date
 
+
+class UserToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    access_token = models.CharField(max_length=255)
+    refresh_token = models.CharField(max_length=255)
+
 # TODO Notification or reminders table
-# Refrctor blood_type to blood_group ??
+# Refactor blood_type to blood_group ??
 # TODO Add next donation next eligible date to blood donor profile table ✅
 # TODO Donation history table with one-to-many relationship with Donor profile table ✅
