@@ -19,7 +19,7 @@ environ.Env()
 environ.Env.read_env()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-ENV_PATH = f"{BASE_DIR}/ontrivConfig/.env"
+ENV_PATH = f"{BASE_DIR}/keys/.env"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
