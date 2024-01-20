@@ -8,6 +8,8 @@ from donations.models import DonorProfile, BloodDonationLog, DonationCenter, Don
 from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer, \
     DonationScheduleSerializer
 
+from utilities.calendar import create_service
+
 
 # Create your views here.
 # class views for the DonationCenter Model, handles get and post requests
@@ -113,10 +115,43 @@ class DonationScheduleCreationView(CreateAPIView):
                     # TODO: create a signal to assign a volunteer if not created and assigned
                     # assigned_volunteer=serializer.validated_data['assigned_volunteer'],
 
-                )
+                )      
 
                 instance = serializer.save(blood_donation_log=blood_donation_log)
 
+                # add the schedule donation to the user's google calendar 
+                user = donor_profile.user
+                service = create_service(user)
+
+                # event to add to the user's calendar 
+
+                event = event = {
+                    'summary': 'Donation Schedule',
+                    'location': 'Donation Center',
+                    'description': 'Donation details',
+                    'start': {
+                        'dateTime': '2023-12-01T09:00:00',
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'end': {
+                        'dateTime': '2023-12-01T17:00:00',
+                        'timeZone': 'America/Los_Angeles',
+                    },
+                    'reminders': {
+                        'useDefault': False,
+                        'overrides': [
+                            {'method': 'email', 'minutes': 24 * 60},
+                            {'method': 'popup', 'minutes': 10},
+                        ],
+                    },
+            }
+
+                # method creates the event in the user's calendar 
+                event = service.events().insert(calendarId='primary', body=event).execute()
+
+
+
+                # returns a response        
                 return Response(
                     {
                         "message": "Blood donation schedule created successfully",

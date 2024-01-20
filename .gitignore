@@ -1,3 +1,4 @@
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -165,4 +166,7 @@ cython_debug/
 
 # docker stuff
 .dockerignore
+
+# client credentials for access google Calendar API
+Credentials.json 
 
