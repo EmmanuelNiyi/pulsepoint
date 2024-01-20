@@ -22,7 +22,7 @@ class DonationCenterView(ListCreateAPIView):
 class DonationCenterDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonationCenterSerializer
     queryset = DonationCenter.objects.all()
-    lookup_field = 'name'
+    lookup_field = 'id'
 
 
 class DonorProfileDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -115,7 +115,7 @@ class DonationScheduleCreationView(CreateAPIView):
                     # TODO: create a signal to assign a volunteer if not created and assigned
                     # assigned_volunteer=serializer.validated_data['assigned_volunteer'],
 
-                )      
+                )
 
                 instance = serializer.save(blood_donation_log=blood_donation_log)
 
@@ -144,14 +144,12 @@ class DonationScheduleCreationView(CreateAPIView):
                             {'method': 'popup', 'minutes': 10},
                         ],
                     },
-            }
+                }
 
                 # method creates the event in the user's calendar 
                 event = service.events().insert(calendarId='primary', body=event).execute()
 
-
-
-                # returns a response        
+                # returns a response
                 return Response(
                     {
                         "message": "Blood donation schedule created successfully",

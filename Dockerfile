@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.8-slim-buster
+FROM python:3.8-buster
 
 # Set the working directory to /pulsepoint
 WORKDIR /pulsepoint
@@ -8,7 +8,9 @@ WORKDIR /pulsepoint
 COPY requirements.txt /pulsepoint/
 
 # Install any needed packages specified in requirements.txt
+RUN pip install --upgrade pip
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
 
 # Copy the rest of the application code into the container at /pulsepoint
 COPY . /pulsepoint/

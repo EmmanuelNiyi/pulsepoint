@@ -1,7 +1,10 @@
 from datetime import datetime
-from .models import DonationCenter, Volunteer, InvestigationType, LaboratoryInvestigation, BloodDonationLog, DonationSchedule, DonorProfile
-from rest_framework.serializers import ModelSerializer
 
+from rest_framework import serializers
+
+from .models import DonationCenter, Volunteer, InvestigationType, LaboratoryInvestigation, BloodDonationLog, \
+    DonationSchedule, DonorProfile
+from rest_framework.serializers import ModelSerializer
 
 
 # this is the serializer for all the fields of Donation Center
@@ -44,16 +47,14 @@ class BloodDonationLogSerializer(ModelSerializer):
 
 
 class DonationScheduleSerializer(ModelSerializer):
-    blood_donation_log = BloodDonationLogSerializer()
+    blood_donation_log = BloodDonationLogSerializer(required=False, allow_null=True)
 
     class Meta:
         model = DonationSchedule
         fields = '__all__'
-        extra_kwargs = {'blood_donation_log': {'required': False}}
 
 
 class DonorProfileSerializer(ModelSerializer):
     class Meta:
         model = DonorProfile
         fields = '__all__'
-
