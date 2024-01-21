@@ -80,3 +80,6 @@ from donations.models import DonationCenter
 # docker logs
 docker logs -f <container_id>
 docker logs -f django
+
+python manage.py collectstatic
+python manage.py spectacular --color --file schema.yml
