@@ -1,0 +1,1694 @@
+openapi: 3.0.3
+info:
+  title: Pulsepoint API
+  version: 0.0.1
+  description: A blood donation scheduling and tracking service to streamline the
+    donation process, connect donors with recipients, and ensure efficient coordination
+    within the healthcare system.
+paths:
+  /accounts/api/v1/activate/{id}/:
+    get:
+      operationId: accounts_api_v1_activate_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user activation.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActivation'
+          description: ''
+    post:
+      operationId: accounts_api_v1_activate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user activation.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActivation'
+          description: ''
+  /accounts/api/v1/login/:
+    post:
+      operationId: accounts_api_v1_login_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /accounts/api/v1/register/:
+    get:
+      operationId: accounts_api_v1_register_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: accounts_api_v1_register_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /accounts/api/v1/role/create/:
+    post:
+      operationId: accounts_api_v1_role_create_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Role'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Role'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+          description: ''
+  /accounts/api/v1/role/get/all/:
+    get:
+      operationId: accounts_api_v1_role_get_all_list
+      description: Get all roles view
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRoleList'
+          description: ''
+  /accounts/api/v1/send/code/:
+    post:
+      operationId: accounts_api_v1_send_code_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserActivation'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActivation'
+          description: ''
+  /accounts/api/v1/user/profile/{user}/:
+    get:
+      operationId: accounts_api_v1_user_profile_retrieve
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: accounts_api_v1_user_profile_update
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: accounts_api_v1_user_profile_partial_update
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    delete:
+      operationId: accounts_api_v1_user_profile_destroy
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /accounts/api/v1/user/profile/all/:
+    get:
+      operationId: accounts_api_v1_user_profile_all_list
+      description: Get all User Profiles view
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserProfileList'
+          description: ''
+  /donations/api/v1/donation/:
+    post:
+      operationId: donations_api_v1_donation_create
+      description: |-
+        Register a new blood donation
+
+
+        Try it out
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloodDonationLog'
+          description: ''
+  /donations/api/v1/donation/{id}/:
+    get:
+      operationId: donations_api_v1_donation_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloodDonationLog'
+          description: ''
+    put:
+      operationId: donations_api_v1_donation_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BloodDonationLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloodDonationLog'
+          description: ''
+    patch:
+      operationId: donations_api_v1_donation_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBloodDonationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBloodDonationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBloodDonationLog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BloodDonationLog'
+          description: ''
+    delete:
+      operationId: donations_api_v1_donation_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /donations/api/v1/donation/user/get/all/:
+    get:
+      operationId: donations_api_v1_donation_user_get_all_list
+      description: Get all of a businesses expenses
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBloodDonationLogList'
+          description: ''
+  /donations/api/v1/donationcenter/:
+    get:
+      operationId: donations_api_v1_donationcenter_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDonationCenterList'
+          description: ''
+    post:
+      operationId: donations_api_v1_donationcenter_create
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationCenter'
+          description: ''
+  /donations/api/v1/donationcenter/{id}/:
+    get:
+      operationId: donations_api_v1_donationcenter_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationCenter'
+          description: ''
+    put:
+      operationId: donations_api_v1_donationcenter_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DonationCenter'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationCenter'
+          description: ''
+    patch:
+      operationId: donations_api_v1_donationcenter_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationCenter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationCenter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationCenter'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationCenter'
+          description: ''
+    delete:
+      operationId: donations_api_v1_donationcenter_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /donations/api/v1/donor/profile/{user}/:
+    get:
+      operationId: donations_api_v1_donor_profile_retrieve
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorProfile'
+          description: ''
+    put:
+      operationId: donations_api_v1_donor_profile_update
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonorProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DonorProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DonorProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorProfile'
+          description: ''
+    patch:
+      operationId: donations_api_v1_donor_profile_partial_update
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDonorProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDonorProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDonorProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonorProfile'
+          description: ''
+    delete:
+      operationId: donations_api_v1_donor_profile_destroy
+      parameters:
+      - in: path
+        name: user
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /donations/api/v1/donor/profile/all/:
+    get:
+      operationId: donations_api_v1_donor_profile_all_list
+      description: Get all Donor Profiles view
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDonorProfileList'
+          description: ''
+  /donations/api/v1/scheduledonation/:
+    post:
+      operationId: donations_api_v1_scheduledonation_create
+      description: Create a new blood donation schedule for a donor
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchedule'
+          description: ''
+  /donations/api/v1/scheduledonation/{id}/:
+    get:
+      operationId: donations_api_v1_scheduledonation_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchedule'
+          description: ''
+    put:
+      operationId: donations_api_v1_scheduledonation_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DonationSchedule'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchedule'
+          description: ''
+    patch:
+      operationId: donations_api_v1_scheduledonation_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationSchedule'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationSchedule'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDonationSchedule'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DonationSchedule'
+          description: ''
+    delete:
+      operationId: donations_api_v1_scheduledonation_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AccreditationStatusEnum:
+      enum:
+      - Accredited
+      - Pending
+      - Not Accredited
+      type: string
+      description: |-
+        * `Accredited` - Accredited
+        * `Pending` - Pending Accreditation
+        * `Not Accredited` - Not Accredited
+    BlankEnum:
+      enum:
+      - ''
+    BloodDonationLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        donation_date_time:
+          type: string
+          format: date-time
+          nullable: true
+        blood_type:
+          type: string
+          maxLength: 5
+        donation_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        health_assessment:
+          type: string
+          nullable: true
+        processing_status:
+          type: string
+          nullable: true
+          maxLength: 255
+        storage_information:
+          type: string
+          nullable: true
+        additional_notes:
+          type: string
+          nullable: true
+        is_scheduled_donation:
+          type: boolean
+        donor:
+          type: integer
+        donation_center:
+          type: integer
+        assigned_volunteer:
+          type: integer
+          nullable: true
+        laboratory_investigations:
+          type: integer
+          nullable: true
+      required:
+      - blood_type
+      - created_at
+      - donation_center
+      - donor
+      - id
+      - updated_at
+    BloodTypeEnum:
+      enum:
+      - A+
+      - A-
+      - B+
+      - B-
+      - AB+
+      - AB-
+      - O+
+      - O-
+      type: string
+      description: |-
+        * `A+` - A+
+        * `A-` - A-
+        * `B+` - B+
+        * `B-` - B-
+        * `AB+` - AB+
+        * `AB-` - AB-
+        * `O+` - O+
+        * `O-` - O-
+    DonationCenter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        location_address:
+          type: string
+          maxLength: 255
+        location_city:
+          type: string
+          maxLength: 100
+        location_state:
+          type: string
+          maxLength: 50
+        location_zipcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        contact_email:
+          type: string
+          format: email
+          maxLength: 254
+        contact_phone:
+          type: string
+          maxLength: 15
+        accreditation_status:
+          $ref: '#/components/schemas/AccreditationStatusEnum'
+        accreditation_date:
+          type: string
+          format: date
+          nullable: true
+        opening_time:
+          type: string
+          format: time
+        closing_time:
+          type: string
+          format: time
+        appointment_availability:
+          type: boolean
+        appointment_scheduling_system:
+          type: string
+          nullable: true
+          maxLength: 100
+        notification_preferences:
+          type: string
+          maxLength: 100
+        additional_notes:
+          type: string
+      required:
+      - closing_time
+      - contact_email
+      - contact_phone
+      - created_at
+      - description
+      - id
+      - location_address
+      - location_city
+      - location_state
+      - name
+      - opening_time
+      - updated_at
+    DonationSchedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        blood_donation_log:
+          allOf:
+          - $ref: '#/components/schemas/BloodDonationLog'
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        volunteer_assignment_status:
+          type: boolean
+        scheduled_date_time:
+          type: string
+          format: date-time
+        appointment_status:
+          type: string
+          maxLength: 50
+        reminder_settings:
+          type: string
+          nullable: true
+          maxLength: 50
+        health_assessment:
+          type: string
+          nullable: true
+        notification_preferences:
+          type: string
+          nullable: true
+          maxLength: 50
+        additional_notes:
+          type: string
+        donor:
+          type: integer
+        assigned_volunteer:
+          type: integer
+          nullable: true
+        donation_center:
+          type: integer
+      required:
+      - created_at
+      - donation_center
+      - donor
+      - id
+      - scheduled_date_time
+      - updated_at
+    DonorProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        blood_type:
+          oneOf:
+          - $ref: '#/components/schemas/BloodTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        medical_conditions:
+          type: string
+        total_donations:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        last_donation_date:
+          type: string
+          format: date
+          nullable: true
+        quantity_donated:
+          type: number
+          format: double
+        eligibility_status:
+          $ref: '#/components/schemas/EligibilityStatusEnum'
+        eligibility_reason:
+          type: string
+        preferred_times:
+          type: string
+        receive_notifications:
+          type: boolean
+        opt_in_communication:
+          type: boolean
+        consent_share_information:
+          type: boolean
+        terms_and_conditions_acknowledged:
+          type: boolean
+        additional_notes:
+          type: string
+        user:
+          type: integer
+        user_profile:
+          type: integer
+        preferred_center:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - user
+      - user_profile
+    EligibilityStatusEnum:
+      enum:
+      - Eligible
+      - Deferred
+      - Restricted
+      type: string
+      description: |-
+        * `Eligible` - Eligible
+        * `Deferred` - Deferred
+        * `Restricted` - Restricted
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - password
+      - username
+    PaginatedBloodDonationLogList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BloodDonationLog'
+    PaginatedDonationCenterList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DonationCenter'
+    PaginatedDonorProfileList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DonorProfile'
+    PaginatedRoleList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+    PaginatedUserList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PaginatedUserProfileList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserProfile'
+    PatchedBloodDonationLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        donation_date_time:
+          type: string
+          format: date-time
+          nullable: true
+        blood_type:
+          type: string
+          maxLength: 5
+        donation_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        health_assessment:
+          type: string
+          nullable: true
+        processing_status:
+          type: string
+          nullable: true
+          maxLength: 255
+        storage_information:
+          type: string
+          nullable: true
+        additional_notes:
+          type: string
+          nullable: true
+        is_scheduled_donation:
+          type: boolean
+        donor:
+          type: integer
+        donation_center:
+          type: integer
+        assigned_volunteer:
+          type: integer
+          nullable: true
+        laboratory_investigations:
+          type: integer
+          nullable: true
+    PatchedDonationCenter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        location_address:
+          type: string
+          maxLength: 255
+        location_city:
+          type: string
+          maxLength: 100
+        location_state:
+          type: string
+          maxLength: 50
+        location_zipcode:
+          type: string
+          nullable: true
+          maxLength: 20
+        contact_email:
+          type: string
+          format: email
+          maxLength: 254
+        contact_phone:
+          type: string
+          maxLength: 15
+        accreditation_status:
+          $ref: '#/components/schemas/AccreditationStatusEnum'
+        accreditation_date:
+          type: string
+          format: date
+          nullable: true
+        opening_time:
+          type: string
+          format: time
+        closing_time:
+          type: string
+          format: time
+        appointment_availability:
+          type: boolean
+        appointment_scheduling_system:
+          type: string
+          nullable: true
+          maxLength: 100
+        notification_preferences:
+          type: string
+          maxLength: 100
+        additional_notes:
+          type: string
+    PatchedDonationSchedule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        blood_donation_log:
+          allOf:
+          - $ref: '#/components/schemas/BloodDonationLog'
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        volunteer_assignment_status:
+          type: boolean
+        scheduled_date_time:
+          type: string
+          format: date-time
+        appointment_status:
+          type: string
+          maxLength: 50
+        reminder_settings:
+          type: string
+          nullable: true
+          maxLength: 50
+        health_assessment:
+          type: string
+          nullable: true
+        notification_preferences:
+          type: string
+          nullable: true
+          maxLength: 50
+        additional_notes:
+          type: string
+        donor:
+          type: integer
+        assigned_volunteer:
+          type: integer
+          nullable: true
+        donation_center:
+          type: integer
+    PatchedDonorProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        blood_type:
+          oneOf:
+          - $ref: '#/components/schemas/BloodTypeEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        medical_conditions:
+          type: string
+        total_donations:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        last_donation_date:
+          type: string
+          format: date
+          nullable: true
+        quantity_donated:
+          type: number
+          format: double
+        eligibility_status:
+          $ref: '#/components/schemas/EligibilityStatusEnum'
+        eligibility_reason:
+          type: string
+        preferred_times:
+          type: string
+        receive_notifications:
+          type: boolean
+        opt_in_communication:
+          type: boolean
+        consent_share_information:
+          type: boolean
+        terms_and_conditions_acknowledged:
+          type: boolean
+        additional_notes:
+          type: string
+        user:
+          type: integer
+        user_profile:
+          type: integer
+        preferred_center:
+          type: integer
+          nullable: true
+    PatchedUserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        gender:
+          type: string
+          maxLength: 10
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        contact_address:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 12
+        zip_code:
+          type: string
+          maxLength: 10
+        local_government:
+          type: string
+          maxLength: 25
+        state:
+          type: string
+          maxLength: 255
+        home_address:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 255
+        emergency_contact_name:
+          type: string
+          maxLength: 100
+        emergency_contact_relationship:
+          type: string
+          maxLength: 50
+        emergency_contact_phone:
+          type: string
+          maxLength: 15
+        user:
+          type: integer
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - name
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        roles:
+          type: array
+          items:
+            type: integer
+      required:
+      - id
+      - password
+      - roles
+      - username
+    UserActivation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        activation_key:
+          type: string
+          writeOnly: true
+          maxLength: 30
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        user:
+          type: integer
+      required:
+      - created_at
+      - id
+      - updated_at
+      - user
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        gender:
+          type: string
+          maxLength: 10
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        contact_address:
+          type: string
+          maxLength: 255
+        city:
+          type: string
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 12
+        zip_code:
+          type: string
+          maxLength: 10
+        local_government:
+          type: string
+          maxLength: 25
+        state:
+          type: string
+          maxLength: 255
+        home_address:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 255
+        emergency_contact_name:
+          type: string
+          maxLength: 100
+        emergency_contact_relationship:
+          type: string
+          maxLength: 50
+        emergency_contact_phone:
+          type: string
+          maxLength: 15
+        user:
+          type: integer
+      required:
+      - city
+      - contact_address
+      - country
+      - created_at
+      - gender
+      - id
+      - state
+      - updated_at
+      - user
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
