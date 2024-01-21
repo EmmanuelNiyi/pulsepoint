@@ -47,6 +47,7 @@ ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(",")
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     'accounts',
     'donations',
 
-    'rest_framework',
+
     'drf_yasg',
     'drf_spectacular',
 ]
