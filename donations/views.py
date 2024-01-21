@@ -8,7 +8,7 @@ from donations.models import DonorProfile, BloodDonationLog, DonationCenter, Don
 from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer, \
     DonationScheduleSerializer
 
-from utilities.calendar import create_service
+from .utilities.calendar import create_service
 
 
 # Create your views here.
@@ -125,7 +125,7 @@ class DonationScheduleCreationView(CreateAPIView):
 
                 # event to add to the user's calendar 
 
-                event = event = {
+                event = {
                     'summary': 'Donation Schedule',
                     'location': 'Donation Center',
                     'description': 'Donation details',
