@@ -28,7 +28,9 @@ services:
 
   web:
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     container_name: django
     volumes:

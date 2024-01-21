@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.response import Response
@@ -8,7 +7,7 @@ from donations.models import DonorProfile, BloodDonationLog, DonationCenter, Don
 from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer, \
     DonationScheduleSerializer
 
-from .utilities.calendar import create_service
+from donations.utilities.calendar import create_service
 
 
 # Create your views here.

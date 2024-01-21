@@ -5,7 +5,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from ..models import UserToken
+from donations.models import UserToken
 
 
 # this is a function that create the service with which we connect to the google calendar API to access user's

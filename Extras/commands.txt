@@ -49,7 +49,7 @@ docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic
 docker-compose exec web python manage.py shell
 docker-compose exec web python manage.py test
-docker-compose exec web python manage.py runserver'
+docker-compose exec web python manage.py runserver
 
 # Access the Django container's shell
 docker-compose exec your_django_service_name bash
