@@ -17,7 +17,7 @@ class DonationCenterView(ListCreateAPIView):
     queryset = DonationCenter.objects.all()
 
 
-# class view for getting, updating and deleting a single donationcenter instance
+# class view for getting, updating and deleting a single donation center instance
 class DonationCenterDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DonationCenterSerializer
     queryset = DonationCenter.objects.all()
@@ -97,6 +97,10 @@ class DonationScheduleCreationView(CreateAPIView):
     queryset = DonationSchedule.objects.all()
 
     def perform_create(self, serializer):
+        """
+        Method to perform the creation of a blood donation schedule and log for a donor.
+        Takes a serializer as input. Returns a response with a success or error message.
+        """
         try:
             if serializer.is_valid():
                 # create blood donation schedule
@@ -118,34 +122,25 @@ class DonationScheduleCreationView(CreateAPIView):
 
                 instance = serializer.save(blood_donation_log=blood_donation_log)
 
-                # add the schedule donation to the user's google calendar 
+                # add the schedule donation to the user's Google calendar
                 user = donor_profile.user
                 service = create_service(user)
 
-                # event to add to the user's calendar 
+                # event to add to the user's calendar
 
                 event = {
                     'summary': 'Donation Schedule',
-                    'location': 'Donation Center',
-                    'description': 'Donation details',
+                    'location': serializer.validated_data['donation_center'],
+                    'description': 'Donation Details for Next Blood Donation',
                     'start': {
-                        'dateTime': '2023-12-01T09:00:00',
-                        'timeZone': 'America/Los_Angeles',
+                        'date': serializer.validated_data['schedule_date_time'],
                     },
                     'end': {
-                        'dateTime': '2023-12-01T17:00:00',
-                        'timeZone': 'America/Los_Angeles',
-                    },
-                    'reminders': {
-                        'useDefault': False,
-                        'overrides': [
-                            {'method': 'email', 'minutes': 24 * 60},
-                            {'method': 'popup', 'minutes': 10},
-                        ],
-                    },
+                        'date': serializer.validated_data['schedule_date_time'],
+                    }
                 }
 
-                # method creates the event in the user's calendar 
+                # method creates the event in the user's calendar
                 event = service.events().insert(calendarId='primary', body=event).execute()
 
                 # returns a response

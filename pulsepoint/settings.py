@@ -15,9 +15,7 @@ from pathlib import Path
 
 from environ import environ
 
-environ.Env()
-# reading .env file
-environ.Env.read_env()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_PATH = f"{BASE_DIR}/keys/.env"
