@@ -8,7 +8,7 @@ from django.core.mail import send_mail, EmailMessage
 def send_email(email, activation_key):
     # result = EmailMessage(subject='Activation Mail', body='Here is your activation key ' + activation_key,
     #                       to=['emmanuelniyioriolowo@gmail.com'])
-    result = send_mail('Activation Mail', 'Here is your activation key ' + activation_key,
+    result = send_mail('Activation Mail', f'Here is your activation key {activation_key}',
                        'emmanuelniyi03@gmial.com', [email], fail_silently=False)
     return result
 
