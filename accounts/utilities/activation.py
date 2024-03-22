@@ -1,22 +1,26 @@
 import random
+from smtplib import SMTPException
 
 from django.core.mail import send_mail, EmailMessage
-
 
 # from twilio.rest import Client
 # from wedding.settings import TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN
 
 
+from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
+
+
 def send_email(email, activation_key):
     print("Sending email")
     try:
-
-        result = send_mail('Activation Mail', 'Here is your activation key ' + activation_key,
-                           'EmmanuelNiyi@pulsepoint.world', [email], fail_silently=False)
-        return result
+        result = send_mail('Activation Mail', 'Here is your activation key: ' + activation_key,
+                           'EmmanuelNiyi@gmail.com', [email], fail_silently=False)
+        return True
+    except SMTPException as e:
+        raise ValidationError(f"An error occurred while sending the activation email: {e}")
     except Exception as e:
-        raise f"An error occurred while sending: {e}"
-
+        raise ValidationError(f"An unexpected error occurred while sending the activation email: {e}")
 
 
 # def send_sms(phone, activation_key):

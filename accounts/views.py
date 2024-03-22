@@ -66,20 +66,29 @@ class SendActivationCodeView(generics.CreateAPIView):
         serializer = UserActivationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            user = User.objects.get(id=user.id)
+            try:
+                user = User.objects.get(id=user.id)
+            except User.DoesNotExist:
+                return Response("User not found", status=status.HTTP_404_NOT_FOUND)
+
             activation_key = generate_activation()
+            activate, _created = UserActivation.objects.update_or_create(
+                user_id=user.id,
+                defaults={'activation_key': activation_key}
+            )
 
-            activate, _created = UserActivation.objects.update_or_create(user_id=user.id,
-                                                                         defaults={'activation_key': activation_key})
+            try:
+                activate.save()
+            except Exception as e:
+                return Response(f"Error saving activation: {e}", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            activate.save()
-            # print(activate)
             result = send_email(user.email, activation_key)
 
-            if result == 1:
-                return Response(f'Activation code sent', status=status.HTTP_200_OK)
+            if result:
+                return Response('Activation code sent', status=status.HTTP_200_OK)
             else:
-                return Response(f'Activation code not sent', status=status.HTTP_400_BAD_REQUEST)
+                return Response('Error sending activation code', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
