@@ -15,13 +15,13 @@ def send_email(email, activation_key):
     print("Sending email")
     try:
         result = send_mail('Activation Mail', 'Here is your activation key: ' + activation_key,
-                           'EmmanuelNiyi@gmail.com', [email], fail_silently=False)
+                           'EmmanuelNiyi@pulsepoint.world', [email], fail_silently=False)
+        print(result)
         return True
     except SMTPException as e:
         raise ValidationError(f"An error occurred while sending the activation email: {e}")
     except Exception as e:
         raise ValidationError(f"An unexpected error occurred while sending the activation email: {e}")
-
 
 # def send_sms(phone, activation_key):
 #     print("am here")
