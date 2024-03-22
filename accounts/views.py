@@ -65,18 +65,15 @@ class SendActivationCodeView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = UserActivationSerializer(data=request.data)
         if serializer.is_valid():
-            print(serializer.validated_data)
             user = serializer.validated_data['user']
             user = User.objects.get(id=user.id)
             activation_key = generate_activation()
-
-            # activate = UserActivation.objects.create(user_id=serializer.validated_data['user'],
-            #                                          activation_key=activation_key)
 
             activate, _created = UserActivation.objects.update_or_create(user_id=user.id,
                                                                          defaults={'activation_key': activation_key})
 
             activate.save()
+            # print(activate)
             result = send_email(user.email, activation_key)
 
             if result == 1:

@@ -8,11 +8,16 @@ from django.core.mail import send_mail, EmailMessage
 
 
 def send_email(email, activation_key):
-    # result = EmailMessage(subject='Activation Mail', body='Here is your activation key ' + activation_key,
-    #                       to=['emmanuelniyioriolowo@gmail.com'])
-    result = send_mail('Activation Mail', 'Here is your activation key ' + activation_key,
-                       'emmanuelniyi03@gmial.com', [email], fail_silently=False)
-    return result
+    print("Sending email")
+    try:
+
+        result = send_mail('Activation Mail', 'Here is your activation key ' + activation_key,
+                           'EmmanuelNiyi@pulsepoint.world', [email], fail_silently=False)
+        return result
+    except Exception as e:
+        raise f"An error occurred while sending: {e}"
+
+
 
 # def send_sms(phone, activation_key):
 #     print("am here")

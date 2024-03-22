@@ -22,8 +22,9 @@ ENV DEBUG=False
 # Expose port 8000 for the Django app
 EXPOSE 8000
 
-# Start the Django development server
-COPY entrypoint.sh /usr/app/entrypoint.sh
-RUN chmod +x /usr/app/entrypoint.sh
+# Copy the entrypoint script into the container at /pulsepoint
+COPY entrypoint.sh /pulsepoint/entrypoint.sh
+RUN chmod +x /pulsepoint/entrypoint.sh
 
-CMD ["/usr/app/entrypoint.sh"]
+# Start the Django development server using the entrypoint script
+CMD ["/pulsepoint/entrypoint.sh"]
