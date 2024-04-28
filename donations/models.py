@@ -177,7 +177,7 @@ class DonorProfile(models.Model):
     def get_eligibility_date(self):
         """
         Calculate the next eligibility date for donation based on the last donation date.
-    
+
         Returns:
             datetime.date: The next eligibility date for donation.
         """
@@ -190,8 +190,8 @@ class DonorProfile(models.Model):
 
 class UserToken(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    # access_token = models.CharField(max_length=255)
-    # refresh_token = models.CharField(max_length=255)
+    access_token = models.CharField(max_length=255)
+    refresh_token = models.CharField(max_length=255)
 
 # TODO Notification or reminders table
 # Refactor blood_type to blood_group ??

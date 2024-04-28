@@ -7,7 +7,6 @@ from donations.models import DonorProfile, BloodDonationLog, DonationCenter, Don
 from donations.serializers import DonationCenterSerializer, DonorProfileSerializer, BloodDonationLogSerializer, \
     DonationScheduleSerializer
 
-from donations.utilities.calendar import create_service
 
 
 # Create your views here.
@@ -103,51 +102,30 @@ class DonationScheduleCreationView(CreateAPIView):
         """
         try:
             if serializer.is_valid():
-                # create blood donation schedule
+                # Retrieve the donor profile based on the validated data
+                donor_profile = DonorProfile.objects.get(user_profile=serializer.validated_data['donor'])
 
-                # create blood donation log
-                donor_profile = DonorProfile.objects.filter(user_profile=serializer.validated_data['donor'])[0]
+                # Get the blood type from the donor profile
                 blood_type = donor_profile.blood_type
+
+                # Create a new blood donation log with the donor, donation center, blood type, and additional notes
                 blood_donation_log = BloodDonationLog.objects.create(
                     donor=serializer.validated_data['donor'],
                     donation_center=serializer.validated_data['donation_center'],
                     is_scheduled_donation=True,
                     blood_type=blood_type,
                     additional_notes=serializer.validated_data['additional_notes'],
-
-                    # TODO: create a signal to assign a volunteer if not created and assigned
-                    # assigned_volunteer=serializer.validated_data['assigned_volunteer'],
-
                 )
 
+                # Save the blood donation log in the serializer instance
                 instance = serializer.save(blood_donation_log=blood_donation_log)
 
-                # add the schedule donation to the user's Google calendar
-                user = donor_profile.user
-                service = create_service(user)
 
-                # event to add to the user's calendar
-
-                event = {
-                    'summary': 'Donation Schedule',
-                    'location': serializer.validated_data['donation_center'],
-                    'description': 'Donation Details for Next Blood Donation',
-                    'start': {
-                        'date': serializer.validated_data['schedule_date_time'],
-                    },
-                    'end': {
-                        'date': serializer.validated_data['schedule_date_time'],
-                    }
-                }
-
-                # method creates the event in the user's calendar
-                event = service.events().insert(calendarId='primary', body=event).execute()
-
-                # returns a response
+                # Return a response with a success message and the created instance
                 return Response(
                     {
                         "message": "Blood donation schedule created successfully",
-                        "instance": instance,
+                        "instance": instance
                     },
                     status=status.HTTP_201_CREATED,
                 )
